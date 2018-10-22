@@ -62,7 +62,6 @@ double heavenlyBody::GR_adjusted_acceleration(heavenlyBody &otherBody, const int
   double l = this->angular_momentum2D();
   double r = this->distance(otherBody);
   if(r!=0) return this->newtonian_acceleration(otherBody, dim)*(1.0 + 3*l*l/(r*r*c*c));
-  // if(r!=0) return newtonian_acceleration(otherBody, dim)*(1.0 + 3*l*l/(r*r*c*c));
   else return 0;
 }
 
@@ -70,4 +69,9 @@ double heavenlyBody::GR_adjusted_acceleration(heavenlyBody &otherBody, const int
 double heavenlyBody::angular_momentum2D()
 {
   return this->position[0]*this->velocity[1] - this->position[1]*this->velocity[0];
+}
+
+double heavenlyBody::position_angle2D()
+{
+  return atan(this->position[1]/this->position[0]);
 }

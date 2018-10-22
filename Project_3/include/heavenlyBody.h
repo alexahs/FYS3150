@@ -25,6 +25,7 @@ public:
   double newtonian_acceleration(heavenlyBody &otherBody, const int dimPos);
   double GR_adjusted_acceleration(heavenlyBody &otherBody, const int dimPos);
   double angular_momentum2D();
+  double position_angle2D();
 
 
 };
