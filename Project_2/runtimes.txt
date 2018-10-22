@@ -1,0 +1,64 @@
+alexander@alexander-ubuntu:~/fys3150/FYS3150_project2$ ./project2.exe 10 5 1
+Program time: 0.000240049
+no. of jacobi iterations: 135
+eigenvalues:
+ 2.899824384
+ 6.475574115
+ 9.639956292
+ 12.32837724
+alexander@alexander-ubuntu:~/fys3150/FYS3150_project2$ ./project2.exe 50 5 1
+Program time: 0.028634
+no. of jacobi iterations: 4281
+eigenvalues:
+ 2.996742325
+ 6.983692392
+ 10.96019768
+ 14.92755183
+alexander@alexander-ubuntu:~/fys3150/FYS3150_project2$ ./project2.exe 100 5 1
+Program time: 0.34794
+no. of jacobi iterations: 17632
+eigenvalues:
+ 2.999202661
+ 6.996013156
+ 10.99035801
+ 14.98499012
+alexander@alexander-ubuntu:~/fys3150/FYS3150_project2$ ./project2.exe 200 5 1
+Program time: 5.15188
+no. of jacobi iterations: 71145
+eigenvalues:
+  2.99980271
+ 6.999015051
+ 10.99772786
+ 14.99978776
+alexander@alexander-ubuntu:~/fys3150/FYS3150_project2$ ./project2.exe 150 5 1
+Program time: 1.66422
+no. of jacobi iterations: 39936
+eigenvalues:
+ 2.999648061
+ 6.998241438
+   10.995824
+ 14.99584431
+alexander@alexander-ubuntu:~/fys3150/FYS3150_project2$ ./project2.exe 200 5 1
+Program time: 5.14834
+no. of jacobi iterations: 71145
+eigenvalues:
+  2.99980271
+ 6.999015051
+ 10.99772786
+ 14.99978776
+alexander@alexander-ubuntu:~/fys3150/FYS3150_project2$ ./project2.exe 300 5 1
+Program time: 25.3699
+no. of jacobi iterations: 160748
+eigenvalues:
+ 2.999912615
+ 6.999564876
+ 10.99908738
+ 15.00276158
+alexander@alexander-ubuntu:~/fys3150/FYS3150_project2$ ./project2.exe 400 5 1
+Program time: 80.0465
+no. of jacobi iterations: 287164
+eigenvalues:
+ 2.999950932
+ 6.999756601
+ 10.99956491
+ 15.00388928
