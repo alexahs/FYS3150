@@ -14,18 +14,18 @@ public:
   double velocity[3];
   double Epot;
   double Ekin;
-  // std::string name;
 
   //Initializers
   heavenlyBody();
-  heavenlyBody(double m, double x, double y, double z, double vx, double vy, double vz);//, std::string newName);
+  heavenlyBody(double m, double x, double y, double z, double vx, double vy, double vz);
 
   //Functions
-  double distance(heavenlyBody &otherBody);
-  double newtonian_acceleration(heavenlyBody &otherBody, const int dimPos);
-  double GR_adjusted_acceleration(heavenlyBody &otherBody, const int dimPos);
-  double angular_momentum2D();
-  double position_angle2D();
+  double kinetic_energy();
+  double distance(heavenlyBody &otherBody); //calculates the distnce r relative to another planet
+  double newtonian_acceleration(heavenlyBody &otherBody, const int dimPos); //calculates the acceleration due to gravity of another planet
+  double GR_adjusted_acceleration(heavenlyBody &otherBody, const int dimPos); //takes into account relativistic effects
+  double angular_momentum2D(); //calculates angular momentum per mass in two dimensions
+  double position_angle2D(); //calculates the angle of the planets position in the 2D plane for a given position
 
 
 };

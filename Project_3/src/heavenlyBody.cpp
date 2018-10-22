@@ -13,10 +13,9 @@ heavenlyBody::heavenlyBody()
   velocity[2] = 0.0;
   Epot = 0.0;
   Ekin = 0.0;
-  // name = "";
 }
 
-heavenlyBody::heavenlyBody(double m, double x, double y, double z, double vx, double vy, double vz)// std::string newName)
+heavenlyBody::heavenlyBody(double m, double x, double y, double z, double vx, double vy, double vz)
 {
   mass = m;
   position[0] = x;
@@ -27,7 +26,14 @@ heavenlyBody::heavenlyBody(double m, double x, double y, double z, double vx, do
   velocity[2] = vz;
   Epot = 0.0;
   Ekin = 0.0;
-  // name = newName;
+}
+
+double heavenlyBody::kinetic_energy()
+{
+  vx = this->velocity[0];
+  vy = this->velocity[1];
+  vz = this->velocity[2];
+  return 0.5*this->mass*(vx*vx + vy*vy + vz*vz)
 }
 
 double heavenlyBody::distance(heavenlyBody &otherBody)
