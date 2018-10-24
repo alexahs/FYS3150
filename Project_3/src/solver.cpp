@@ -24,9 +24,18 @@ void solver::solve(){
 
 
   ofstream outfile;
+
+  //Timer
+  using std::chrono::steady_clock;
+  using std::chrono::duration_cast;
+  using std::chrono::duration;
+  steady_clock::time_point programStart;
+  programStart = steady_clock::now();
+
   if(this->solverType == 0){
     outfile.open("verlet.dat");
     cout << "Solving with Verlet..." << endl;
+
     //Velocity Verlet
     for(int i = 0; i < gridPoints; i++){
       for(heavenlyBody &current: bodies){
@@ -72,6 +81,7 @@ void solver::solve(){
   else if(this->solverType == 1){
     outfile.open("euler.dat");
     cout << "Solving with Euler..."<< endl;
+
     //Euler-Chromer
     for(int i = 0; i < gridPoints; i++){
       for(heavenlyBody &current: bodies){
@@ -105,5 +115,8 @@ void solver::solve(){
   }//end euler
   outfile.close();
 
+  //Print run time to terminal
+  duration<double> programTime = duration_cast<duration<double>>(steady_clock::now() - programStart);
+  cout << "Program time: " << programTime.count() << endl;
 
 }
