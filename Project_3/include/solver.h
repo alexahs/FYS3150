@@ -19,11 +19,10 @@ public:
   double simulationTime;
   vector <heavenlyBody> bodies;
   int solverType;
-  string outfileName;
 
   //Initializers
   solver();
-  solver(int n, double T, vector <heavenlyBody> bodies, int m);
+  solver(int n, double T, vector <heavenlyBody> planets, int m);
 
   //Methods
   void solve();

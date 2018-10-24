@@ -1,7 +1,7 @@
 #include "heavenlyBody.h"
 
-double G = 4*M_PI*M_PI;
-double c = 63241.0;      //AU per yr
+double G = 4*M_PI*M_PI;   //useful constant
+double c = 63241.0;      //speed of light in AU per yr
 heavenlyBody::heavenlyBody()
 {
   mass = 1.0;
@@ -11,8 +11,6 @@ heavenlyBody::heavenlyBody()
   velocity[0] = 0.0;
   velocity[1] = 0.0;
   velocity[2] = 0.0;
-  Epot = 0.0;
-  Ekin = 0.0;
 }
 
 heavenlyBody::heavenlyBody(double m, double x, double y, double z, double vx, double vy, double vz)
@@ -24,16 +22,15 @@ heavenlyBody::heavenlyBody(double m, double x, double y, double z, double vx, do
   velocity[0] = vx;
   velocity[1] = vy;
   velocity[2] = vz;
-  Epot = 0.0;
-  Ekin = 0.0;
 }
 
 double heavenlyBody::kinetic_energy()
 {
+  double vx, vy, vz;
   vx = this->velocity[0];
   vy = this->velocity[1];
   vz = this->velocity[2];
-  return 0.5*this->mass*(vx*vx + vy*vy + vz*vz)
+  return 0.5*this->mass*(vx*vx + vy*vy + vz*vz);
 }
 
 double heavenlyBody::distance(heavenlyBody &otherBody)

@@ -5,26 +5,26 @@ from scipy.signal import find_peaks
 plt.style.use('ggplot')
 convert = 3600*180/np.pi
 #
-# data = np.loadtxt("solarsystem1.dat")
-# # ###3 DIMENSIONS###
-# n = len(data[:,0])
-# p_no = int(len(data[1,:])/3.0)
-#
-# planetlist = ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
-#
-#
-# w = 13; h = 8
-# fig = plt.figure(figsize=(w,h))
-# ax = fig.add_subplot(111, projection='3d')
-#
-# for i in range(p_no):
-#     plt.plot(data[:, i*3], data[:, i*3+1], data[:,i*3+2])
-#
-# ax.set_xlabel("x [AU]")
-# ax.set_ylabel("y [AU]")
-# ax.set_zlabel("z [AU]")
-# plt.legend(planetlist)
-# plt.show()
+data = np.loadtxt("verlet.dat")
+# ###3 DIMENSIONS###
+n = len(data[:,0])
+p_no = int(len(data[1,:])/3.0)
+
+planetlist = ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+
+
+w = 13; h = 8
+fig = plt.figure(figsize=(w,h))
+ax = fig.add_subplot(111, projection='3d')
+
+for i in range(p_no):
+    plt.plot(data[:, i*3], data[:, i*3+1], data[:,i*3+2])
+
+ax.set_xlabel("x [AU]")
+ax.set_ylabel("y [AU]")
+ax.set_zlabel("z [AU]")
+plt.legend(planetlist)
+plt.show()
 
 
 # plt.plot(data[:,0], data[:,1], data[:,2])
@@ -79,32 +79,32 @@ convert = 3600*180/np.pi
 
 ###PRECESSION###
 #
-data = np.loadtxt("precession_GR.dat")
-
-alength = len(data[:,0])
-x = data[:,0]
-y = data[:,1]
-t = np.linspace(0, 100, alength)
-
-arcsecs = np.zeros(alength)
-for i in range(alength):
-    arcsecs[i] = np.arctan(y[i]/x[i])*convert
-
-
-p = np.polyfit(t, arcsecs, 1)
-
-b = p[0]
-m = p[1]
-yline = np.polyval(p, t)
-print yline[-1] - yline[0]
-
-
-plt.plot(t, arcsecs)
-plt.plot(t, yline)
-plt.xlabel("Time [years]")
-plt.ylabel("Seconds of arc")
-plt.legend(["Precession", "Fitted line"])
-plt.show()
+# data = np.loadtxt("precession_GR.dat")
+#
+# alength = len(data[:,0])
+# x = data[:,0]
+# y = data[:,1]
+# t = np.linspace(0, 100, alength)
+#
+# arcsecs = np.zeros(alength)
+# for i in range(alength):
+#     arcsecs[i] = np.arctan(y[i]/x[i])*convert
+#
+#
+# p = np.polyfit(t, arcsecs, 1)
+#
+# b = p[0]
+# m = p[1]
+# yline = np.polyval(p, t)
+# print yline[-1] - yline[0]
+#
+#
+# plt.plot(t, arcsecs)
+# plt.plot(t, yline)
+# plt.xlabel("Time [years]")
+# plt.ylabel("Seconds of arc")
+# plt.legend(["Precession", "Fitted line"])
+# plt.show()
 
 
 ###2D

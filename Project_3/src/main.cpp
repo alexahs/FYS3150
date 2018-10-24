@@ -1,3 +1,16 @@
+/*
+This program is used to simulate the solar system, by using the classes
+heavenlyBody.cpp and solver.cpp.
+heavenlyBody.cpp contains the properties of the planets aswell as the methods
+for calculating acceleration and distance to other planets.
+solver.cpp contains two ODE solvers, Euler-Chromer and Velocity Verlet.
+Preffered ODE solver must be specified as the first commandline argument, 0 for Verlet
+and 1 for Euler. Total simulation time in years and gridpoints must be specified as
+the second and third commandline arguments.
+The program produces a .dat containing the x, y and z positions of each time step
+for each planet.
+*/
+
 #include <iostream>
 #include <cmath>
 #include <fstream>
@@ -16,26 +29,24 @@ using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 using std::chrono::duration;
 
-double pi = M_PI;
-
 
 int main(int argc, char* argv[])
 {
 
-  char *outfilename;
+  string outfilename;
   if(argc < 4){
     cout << "Bad usage: " << argv[0] <<
-    " Read output filename, simulation time and grid points on same line" << endl;
+    " Read from terminal solver type, simulation time and grid points on same line" << endl;
     exit(1);
   }
 
   outfilename = argv[1];
-  double T_ = atof(argv[2]);
+  int solverType = atoi(argv[1]);
+  double T = atof(argv[2]);
   int n = atoi(argv[3]);
-  double h = T_/((double) n);
 
-  //Initial conditions of planets
-  vector<heavenlyBody> allBodies;
+  //Initial conditions of planets, found on the horizons webpage
+  vector<heavenlyBody> planets;
   double solarMass = 1.9891e30;
 
   heavenlyBody Sun = heavenlyBody(1.0,0,0,0,0,0,0);
@@ -48,19 +59,19 @@ int main(int argc, char* argv[])
   heavenlyBody Uranus = heavenlyBody(8.681E25/solarMass, 1.719595695177778E+01,  9.965486713193039E+00, -1.857636424997038E-01, 365.25*-2.000761535443054E-03, 365.25* 3.219594226509228E-03, 365.25* 3.795711294500967E-05);
   heavenlyBody Neptune = heavenlyBody(1.024E26/solarMass, 2.891239407445751E+01, -7.753050308782163E+00, -5.066556247342422E-01, 365.25*7.926104454699854E-04, 365.25* 3.050689379330089E-03, 365.25*-8.139915196891708E-05);
   heavenlyBody Pluto = heavenlyBody(1.30900E22/solarMass, 1.161374129179143E+01, -3.157937303069106E+01,  1.979427629835602E-02, 365.25*3.006977217402132E-03, 365.25* 4.205759240708480E-04, 365.25*-9.057561756443009E-04);
-  allBodies.push_back(Sun);
-  allBodies.push_back(Mercury);
-  allBodies.push_back(Venus);
-  allBodies.push_back(Earth);
-  allBodies.push_back(Mars);
-  allBodies.push_back(Jupiter);
-  allBodies.push_back(Saturn);
-  allBodies.push_back(Uranus);
-  allBodies.push_back(Neptune);
-  allBodies.push_back(Pluto);
 
-  solver solveSystem = solver(n, T, allBodies, 0, outfilename);
+  planets.push_back(Sun);
+  planets.push_back(Mercury);
+  planets.push_back(Venus);
+  planets.push_back(Earth);
+  planets.push_back(Mars);
+  planets.push_back(Jupiter);
+  planets.push_back(Saturn);
+  planets.push_back(Uranus);
+  planets.push_back(Neptune);
+  planets.push_back(Pluto);
+
+  solver solveSystem = solver(n, T, planets, solverType);
   solveSystem.solve();
-
 
 }

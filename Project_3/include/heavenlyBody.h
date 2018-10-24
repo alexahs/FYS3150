@@ -19,7 +19,7 @@ public:
   heavenlyBody();
   heavenlyBody(double m, double x, double y, double z, double vx, double vy, double vz);
 
-  //Functions
+  //Methods
   double kinetic_energy();
   double distance(heavenlyBody &otherBody); //calculates the distnce r relative to another planet
   double newtonian_acceleration(heavenlyBody &otherBody, const int dimPos); //calculates the acceleration due to gravity of another planet

@@ -1,39 +1,40 @@
 #include "solver.h"
 
-
 solver::solver(){
 
-  gridPoints = 1000;
-  simulationTime = 1.0;
+  cout << "Cannot be initialized without arguments"<< endl;
+  exit(1);
 }
 
-solver::solver(int n, double T, vector <heavenlyBody> bodies, int m, string ofname){
+solver::solver(int n, double T, vector<heavenlyBody> planets, int m){
   gridPoints = n;
   simulationTime = T;
-  allBodies = bodies;
+  bodies = planets;
   solverType = m;
-  outfileName = ofname;
 }
 
 void solver::solve(){
   //precalculated constants
-  h = simulationTime/((double) gridPoints);
-  hHalf = h/2.0;
-  h2Half = h*h/2.0;
+  double h = simulationTime/((double) gridPoints);
+  double hHalf = h/2.0;
+  double h2Half = h*h/2.0;
 
   //temporary acceleration values
-  double ax, double ay, double az, double axNew, double ayNew, double azNew;
+  double ax, ay, az, axNew, ayNew, azNew;
+
+
   ofstream outfile;
-  outfile.open(outfileName);
   if(this->solverType == 0){
+    outfile.open("verlet.dat");
+    cout << "Solving with Verlet..." << endl;
     //Velocity Verlet
     for(int i = 0; i < gridPoints; i++){
-      for(heavenlyBody &current: allBodies){
+      for(heavenlyBody &current: bodies){
 
         //reset acceleration after each loop
         ax = ay = az = axNew = ayNew = azNew = 0.0;
 
-        for(heavenlyBody &other: allBodies){
+        for(heavenlyBody &other: bodies){
           ax += current.newtonian_acceleration(other, 0);
           ay += current.newtonian_acceleration(other, 1);
           az += current.newtonian_acceleration(other, 2);
@@ -44,11 +45,11 @@ void solver::solve(){
         outfile << setw(30) << setprecision(12) << current.position[1];
         outfile << setw(30) << setprecision(12) << current.position[2];
 
-        current.position[0] = current.position[0] + h*current.velocity[0] + h2Half*accelerationOld[0];
-        current.position[1] = current.position[1] + h*current.velocity[1] + h2Half*accelerationOld[1];
-        current.position[2] = current.position[2] + h*current.velocity[2] + h2Half*accelerationOld[2];
+        current.position[0] = current.position[0] + h*current.velocity[0] + h2Half*ax;
+        current.position[1] = current.position[1] + h*current.velocity[1] + h2Half*ay;
+        current.position[2] = current.position[2] + h*current.velocity[2] + h2Half*az;
 
-        for(heavenlyBody &other: allBodies)
+        for(heavenlyBody &other: bodies)
         {
           axNew += current.newtonian_acceleration(other, 0);
           ayNew += current.newtonian_acceleration(other, 1);
@@ -61,27 +62,29 @@ void solver::solve(){
 
 
 
-      }//end allBodies loop
+      }//end bodies loop
       outfile << endl;
     }//end integration loop
 
 
   } //end verlet
 
-  if(this->solverType == 1){
+  else if(this->solverType == 1){
+    outfile.open("euler.dat");
+    cout << "Solving with Euler..."<< endl;
     //Euler-Chromer
     for(int i = 0; i < gridPoints; i++){
-      for(heavenlyBody &current: allBodies){
+      for(heavenlyBody &current: bodies){
 
         //reset acceleration after each loop
         ax = ay = az = 0.0;
 
-        for(heavenlyBody &other: allBodies){
+        for(heavenlyBody &other: bodies){
           ax += current.newtonian_acceleration(other, 0);
           ay += current.newtonian_acceleration(other, 1);
           az += current.newtonian_acceleration(other, 2);
         }
-
+        cout << ax << endl;
         current.velocity[0] += h*ax;
         current.velocity[1] += h*ay;
         current.velocity[2] += h*az;
@@ -96,7 +99,7 @@ void solver::solve(){
         outfile << setw(30) << setprecision(12) << current.position[2];
 
 
-      }//end allBodies loop
+      }//end bodies loop
       outfile << endl;
     }//end integration loop
   }//end euler
