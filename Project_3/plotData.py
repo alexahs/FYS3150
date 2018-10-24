@@ -5,7 +5,7 @@ from scipy.signal import find_peaks
 plt.style.use('ggplot')
 convert = 3600*180/np.pi
 #
-# data = np.loadtxt("test.dat")
+# data = np.loadtxt("solarsystem1.dat")
 # # ###3 DIMENSIONS###
 # n = len(data[:,0])
 # p_no = int(len(data[1,:])/3.0)
@@ -13,7 +13,7 @@ convert = 3600*180/np.pi
 # planetlist = ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
 #
 #
-# w = 10; h = 10
+# w = 13; h = 8
 # fig = plt.figure(figsize=(w,h))
 # ax = fig.add_subplot(111, projection='3d')
 #
@@ -79,38 +79,56 @@ convert = 3600*180/np.pi
 
 ###PRECESSION###
 #
-# data = np.loadtxt("precession_GR.dat")
-#
-# alength = len(data[:,0])
-# x = data[:,0]
-# y = data[:,1]
-# t = np.linspace(0, 100, alength)
-#
-# arcsecs = np.zeros(alength)
-# for i in range(alength):
-#     arcsecs[i] = np.arctan(y[i]/x[i])*convert
-#
-#
-# p = np.polyfit(t, arcsecs, 1)
-#
-# b = p[0]
-# m = p[1]
-# yline = np.polyval(p, t)
-# print yline[-1] - yline[0]
-#
-#
-# plt.plot(t, arcsecs)
-# plt.plot(t, yline)
-# plt.xlabel("Time [years]")
-# plt.ylabel("Seconds of arc")
-# plt.legend(["Precession", "Fitted line"])
-# plt.show()
+data = np.loadtxt("precession_GR.dat")
+
+alength = len(data[:,0])
+x = data[:,0]
+y = data[:,1]
+t = np.linspace(0, 100, alength)
+
+arcsecs = np.zeros(alength)
+for i in range(alength):
+    arcsecs[i] = np.arctan(y[i]/x[i])*convert
+
+
+p = np.polyfit(t, arcsecs, 1)
+
+b = p[0]
+m = p[1]
+yline = np.polyval(p, t)
+print yline[-1] - yline[0]
+
+
+plt.plot(t, arcsecs)
+plt.plot(t, yline)
+plt.xlabel("Time [years]")
+plt.ylabel("Seconds of arc")
+plt.legend(["Precession", "Fitted line"])
+plt.show()
 
 
 ###2D
+#
+# data = np.loadtxt("sunearthbeta.dat")
+#
+# plt.plot(data[:,2], data[:,3])
+# plt.plot(0, 0, 'yo')
+# plt.show()
 
-data = np.loadtxt("sunearthbeta.dat")
 
-plt.plot(data[:,2], data[:,3])
-plt.plot(0, 0, 'yo')
-plt.show()
+
+
+###RUN TIMES
+
+# h = np.linspace(1, 8, 8)*-1
+# euler = np.array([1.2e-6, 7.6e-6, 6.5e-5, 1.1e-3, 1.0e-2, 6.3e-2, 0.53, 5.2])
+# verlet = np.array([3.9e-6, 1.7e-5, 9.5e-5, 1.6e-3, 1.1e-2, 6.5e-2, 0.58, 5.8])
+# for i in range(len(h)):
+#     h[i] = 10**h[i]
+#
+# plt.loglog(h, euler)
+# plt.loglog(h, verlet)
+# plt.xlabel("Step size")
+# plt.ylabel("Run time [s]")
+# plt.legend(["Euler", "Velocity Verlet"])
+# plt.show()

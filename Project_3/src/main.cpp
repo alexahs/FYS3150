@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <vector>
 #include "heavenlyBody.h"
+#include "solver.h"
 #include <string>
 
 using namespace std;
@@ -33,18 +34,10 @@ int main(int argc, char* argv[])
   int n = atoi(argv[3]);
   double h = T_/((double) n);
 
-
-  //Initialize vectors
-  vector<double> accelerationOld(3);
-  vector<double> accelerationNew(3);
+  //Initial conditions of planets
   vector<heavenlyBody> allBodies;
-
-
-  //Usefull constants
-  double FourPi2 = 4*pi*pi;
   double solarMass = 1.9891e30;
 
-  //Initial conditions of planets
   heavenlyBody Sun = heavenlyBody(1.0,0,0,0,0,0,0);
   heavenlyBody Mercury = heavenlyBody(1.307e22/solarMass,-3.294363957786441E-01,-2.928799526088138E-01,5.618346324205380E-03,365.25*1.320405892727915E-02, 365.25*-1.952252048338632E-02, 365.25*-2.807294373094382E-03);
   heavenlyBody Venus = heavenlyBody(4.867E24/solarMass, 7.243545955158947E-01, -3.278712379892032E-02, -4.242728890559555E-02, 365.25*1.017391327967621E-03, 365.25* 2.010584861519629E-02, 365.25* 2.168289888508737E-04);
@@ -66,61 +59,8 @@ int main(int argc, char* argv[])
   allBodies.push_back(Neptune);
   allBodies.push_back(Pluto);
 
-
-  outfile.open(outfilename);
-  for(int i = 0; i < n; i++)
-  {
-    for(heavenlyBody &current: allBodies)
-    {
-
-
-        //Set acceleration to 0
-        accelerationOld = {0.0, 0.0, 0.0};
-        accelerationNew = {0.0, 0.0, 0.0};
-
-        //Calculate acceleration
-        for(heavenlyBody &other: allBodies)
-        {
-          accelerationOld[0] += current.newtonian_acceleration(other, 0);
-          accelerationOld[1] += current.newtonian_acceleration(other, 1);
-          accelerationOld[2] += current.newtonian_acceleration(other, 2);
-        }
-
-        //Calculate new position
-        current.position[0] = current.position[0] + h*current.velocity[0] + 0.5*h*h*accelerationOld[0];
-        current.position[1] = current.position[1] + h*current.velocity[1] + 0.5*h*h*accelerationOld[1];
-        current.position[2] = current.position[2] + h*current.velocity[2] + 0.5*h*h*accelerationOld[2];
-
-
-        //Sun fixed in the origin
-        // allBodies[0].position[0] = 0.0;
-        // allBodies[0].position[1] = 0.0;
-        // allBodies[0].position[2] = 0.0;
-
-        //Calculate acceleration in next step
-        for(heavenlyBody &other: allBodies)
-        {
-          accelerationNew[0] += current.newtonian_acceleration(other, 0);
-          accelerationNew[1] += current.newtonian_acceleration(other, 1);
-          accelerationNew[2] += current.newtonian_acceleration(other, 2);
-        }
-
-        //Calculate new velocity
-        current.velocity[0] = current.velocity[0] + 0.5*h*(accelerationOld[0] + accelerationNew[0]);
-        current.velocity[1] = current.velocity[1] + 0.5*h*(accelerationOld[1] + accelerationNew[1]);
-        current.velocity[2] = current.velocity[2] + 0.5*h*(accelerationOld[2] + accelerationNew[2]);
-
-        //Write to file
-        outfile << setw(30) << setprecision(12) << current.position[0];
-        outfile << setw(30) << setprecision(12) << current.position[1];
-        outfile << setw(30) << setprecision(12) << current.position[2];
-  }
-    outfile << endl;
-  }
-  outfile.close();
-
-
-
+  solver solveSystem = solver(n, T, allBodies, 0, outfilename);
+  solveSystem.solve();
 
 
 }
