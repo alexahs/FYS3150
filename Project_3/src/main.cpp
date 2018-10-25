@@ -49,7 +49,8 @@ int main(int argc, char* argv[])
   vector<heavenlyBody> planets;
   double solarMass = 1.9891e30;
 
-  heavenlyBody Sun = heavenlyBody(1.0,0,0,0,0,0,0);
+  // heavenlyBody Sun = heavenlyBody(1.0,0,0,0,0,0,0);
+  heavenlyBody Sun = heavenlyBody(1.0, -7.175013564692218E-05, 7.222562851350428E-03, -7.457381690003485E-05, -7.559933970129715E-06*365.25, 365.25*2.681945562288024E-06, 365.25*1.889002113326395E-07);
   heavenlyBody Mercury = heavenlyBody(1.307e22/solarMass,-3.294363957786441E-01,-2.928799526088138E-01,5.618346324205380E-03,365.25*1.320405892727915E-02, 365.25*-1.952252048338632E-02, 365.25*-2.807294373094382E-03);
   heavenlyBody Venus = heavenlyBody(4.867E24/solarMass, 7.243545955158947E-01, -3.278712379892032E-02, -4.242728890559555E-02, 365.25*1.017391327967621E-03, 365.25* 2.010584861519629E-02, 365.25* 2.168289888508737E-04);
   heavenlyBody Earth = heavenlyBody(5.972E24/solarMass,9.837576984919719E-01,1.889233809711713E-01,-8.631011464030984E-05,-3.406523137555859E-03*365.25,1.686035619678342E-02*365.25,-1.194254105980157E-06*365.25);
@@ -73,5 +74,6 @@ int main(int argc, char* argv[])
 
   solver solveSystem = solver(n, T, planets, solverType);
   solveSystem.solve();
+
 
 }

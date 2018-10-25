@@ -11,6 +11,12 @@ heavenlyBody::heavenlyBody()
   velocity[0] = 0.0;
   velocity[1] = 0.0;
   velocity[2] = 0.0;
+  acceleration[0] = 0.0;
+  acceleration[1] = 0.0;
+  acceleration[2] = 0.0;
+  accelerationNew[0] = 0.0;
+  accelerationNew[1] = 0.0;
+  accelerationNew[2] = 0.0;
 }
 
 heavenlyBody::heavenlyBody(double m, double x, double y, double z, double vx, double vy, double vz)
@@ -22,6 +28,12 @@ heavenlyBody::heavenlyBody(double m, double x, double y, double z, double vx, do
   velocity[0] = vx;
   velocity[1] = vy;
   velocity[2] = vz;
+  acceleration[0] = 0.0;
+  acceleration[1] = 0.0;
+  acceleration[2] = 0.0;
+  accelerationNew[0] = 0.0;
+  accelerationNew[1] = 0.0;
+  accelerationNew[2] = 0.0;
 }
 
 double heavenlyBody::kinetic_energy()

@@ -4,9 +4,9 @@
 # Date:            2018-09-27
 # Version:         0.1
 # =============================================
-EXEC 			= runproject3.x
+EXEC 			= runproject4.exe
 CPP 			= c++
-CPPflags 	= -Wall -O3 -g
+CPPflags 	= -Wall -O3
 LIB 			= -larmadillo -llapack -lblas
 
 SRC_DIR		= ./src

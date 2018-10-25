@@ -12,8 +12,8 @@ public:
   double mass;
   double position[3];
   double velocity[3];
-  double Epot;
-  double Ekin;
+  double acceleration[3];
+  double accelerationNew[3];
 
   //Initializers
   heavenlyBody();
