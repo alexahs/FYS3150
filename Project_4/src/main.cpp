@@ -64,10 +64,10 @@ int main(int argc, char* argv[])
       // cout << dE << endl;
       if(r <= w[dE+8]){ //Pick condition
         lattice[x][y] *= -1;
-        if(x = 1) lattice[dim+1][y] *= -1;
-        if(x = dim) lattice[0][y] *= -1;
-        if(y = 1) lattice[x][dim+1] *= -1;
-        if(y = dim) lattice[x][0] *= -1;
+        if(x == 1) lattice[dim+1][y] *= -1;
+        if(x == dim) lattice[0][y] *= -1;
+        if(y == 1) lattice[x][dim+1] *= -1;
+        if(y == dim) lattice[x][0] *= -1;
         E += dE;
         M += lattice[x][y]*2;
       }
