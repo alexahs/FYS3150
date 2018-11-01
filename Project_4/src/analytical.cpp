@@ -10,7 +10,7 @@ double energyExpected(){
 
 double energySquaredExpected(){
   double Z = 12 + 4*cosh(8.0);
-  return 256.0*J*J/Z*cosh(8.0);
+  return 256.0/Z*cosh(8.0);
 }
 
 double magnExpected(){

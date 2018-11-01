@@ -6,10 +6,12 @@
 #include <time.h>
 #include <stdlib.h>
 #include <iomanip>
+#include <vector>
+#include <cmath>
 
 
-void orderedLattice(double **lattice, int dim, double *E, double *M);
-void randomLattice(double **lattice, int dim, double *E, double *M);
+void orderedLattice(double **lattice, int dim, double *expVals);
+void randomLattice(double **lattice, int dim, double *expVals);
 
 
 #endif //INITIALIZELATTICE_H

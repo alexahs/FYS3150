@@ -5,8 +5,8 @@
 #include <fstream>
 #include <iostream>
 
-double energyExpected(double J, double beta);
-double energySquaredExpected(double J, double beta);
+double energyExpected();
+double energySquaredExpected();
 double magnExpected();
 double magnSquaredExpected();
 double heatCapacity();
