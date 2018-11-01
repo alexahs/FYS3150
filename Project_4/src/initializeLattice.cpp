@@ -22,10 +22,7 @@ void orderedLattice(double **lattice, int dim, double *expVals){
     }
   }
   expVals[0] = E_initial;
-  expVals[1] = E_initial*E_initial;
   expVals[2] = M_initial;
-  expVals[3] = M_initial*M_initial;
-  expVals[4] = fabs(M_initial);
 }
 
 
@@ -54,8 +51,5 @@ void randomLattice(double **lattice, int dim, double *expVals){
     }
   }
   expVals[0] = E_initial;
-  expVals[1] = E_initial*E_initial;
   expVals[2] = M_initial;
-  expVals[3] = M_initial*M_initial;
-  expVals[4] = fabs(M_initial);
 }
