@@ -9,119 +9,104 @@
 #include <string>
 #include <time.h>
 #include <stdlib.h>
+#include "initializeLattice.h"
+#include "analytical.h"
 
 
 using namespace std;
 
-void randomLattice(double **lattice, int dim, double *E, double *M);
-void orderedLattice(double **lattice, int dim, double *E, double *M);
+void metropolis(int nCycles, int dim, double **lattice, double *E, double *M, vector<double> w);
+void printLattice(double **lattice, int dim);
 
 int main(int argc, char* argv[])
 {
   srand(clock());
-  //allocate memoey
-  int dim = 3;
+
+  //physical constants
+  double k = 1.38064852e-23;
+
+
+  //problem parameters
+  int dim = 2;
   double T = 300;
   int N = dim*dim;
-  int x, y;
-  double E, M = 0;
-  double r;
-  double **lattice = new double*[dim+2];
-  double w[17];
-  for(int i = 0; i < dim+2; i++){
-    lattice[i] = new double[dim+2];
-  }
-  for(int i = 0; i < 17; i+=4){
-    w[i] = exp(-(i-8)/T);
-  }
+  int nCycles = 100000;
+  double E, M, E2, M2 = 0;
+  double beta = 1.0/(k*T);
+  double J = 1.0;
 
-  //create lattice with random states
-  randomLattice(lattice, dim, &E, &M);
-  // orderedLattice(lattice, dim, &E, &M);
+  //allocate memoey
+  double **lattice = new double*[dim+2];
+  vector<double> w(17);
+
+  //initialize dEnergy values
+  for(int i = 0; i < dim+2; i++) lattice[i] = new double[dim+2];
+  for(int i = 0; i < 17; i+=4) w[i] = exp(-(i-8)/T);
+
+
+  // randomLattice(lattice, dim, &E, &M);
+  orderedLattice(lattice, dim, &E, &M);
   cout << "Initial E: " << E << endl;
   cout << "Initial M: " << M << endl;
 
+  metropolis(nCycles, dim, lattice, &E, &M, w);
+
+
+
   //print initial matrix
-  for(int i = 0; i < dim+2; i++){
-    for(int j = 0; j < dim+2; j++){
-      cout << setw(12) << setprecision (10) << lattice[i][j];
-    }
-    cout << endl;
-  }
-  cout << endl;
+  // printLattice(lattice, dim);
 
 
-  //Flip states
-  for(int i = 1; i < dim*dim+1; i++){
-    //pick random element in lattice
-    x = 1 + (rand() & (int)(dim-1));
-    y = 1 + (rand() & (int)(dim-1));
 
-    //calculate delta E
-    int dE = 2*lattice[x][y]*(lattice[x-1][y] + lattice[x+1][y] +
-      lattice[x][y-1] + lattice[x][y+1]);
-      r = (double) rand() / (RAND_MAX);
-      // cout << dE << endl;
-      if(r <= w[dE+8]){ //Pick condition
-        lattice[x][y] *= -1;
-        if(x == 1) lattice[dim+1][y] *= -1;
-        if(x == dim) lattice[0][y] *= -1;
-        if(y == 1) lattice[x][dim+1] *= -1;
-        if(y == dim) lattice[x][0] *= -1;
-        E += dE;
-        M += lattice[x][y]*2;
-      }
-    }
 
-    for(int i = 0; i < dim+2; i++){
-      for(int j = 0; j < dim+2; j++){
-        cout << setw(12) << setprecision (10) << lattice[i][j];
-      }
-      cout << endl;
-    }
+    //print final lattice
+    // printLattice(lattice, dim);
+
+    cout << "Final E: " << E << endl;
+    cout << "Final M: " << M << endl;
+    cout << "Expected energy: " << energyExpected(J, beta) << endl;
 
 
   return 0;
 }
 
+void metropolis(int nCycles, int dim, double **lattice, double *E, double *M, vector<double> w){
 
-void orderedLattice(double **lattice, int dim, double *E, double *M){
-  for(int i = 0; i < dim+2; i++){
-    for(int j = 0; j < dim+2; j++){
-      lattice[i][j] = 1;
-    }
-  }
-  lattice[0][0] = lattice[0][dim+1] = lattice[dim+1][0] = lattice[dim+1][dim+1] = 0;
+  int nSpins = dim*dim;
+  int x, y;
+  double r;
 
-  for(int i = 1; i < dim+1; i++){
-    for(int j = 1; j < dim+1; j++){
-      *M += lattice[i][j];
-      *E -= lattice[i][j]*lattice[i+1][j] + lattice[i][j]*lattice[i][j+1];
-    }
+  for(int cycle = 0; cycle < nCycles; cycle++){
+    //Flip spins
+    for(int i = 1; i < nSpins+1; i++){
+      //pick random element in lattice
+      x = 1 + (rand() & (int)(dim-1));
+      y = 1 + (rand() & (int)(dim-1));
+
+      //calculate delta E
+      int dE = 2*lattice[x][y]*(lattice[x-1][y] + lattice[x+1][y] +
+        lattice[x][y-1] + lattice[x][y+1]);
+        r = (double) rand() / (RAND_MAX);
+        if(r <= w[dE+8]){ //Pick condition
+          lattice[x][y] *= -1;
+          if(x == 1) lattice[dim+1][y] *= -1;
+          if(x == dim) lattice[0][y] *= -1;
+          if(y == 1) lattice[x][dim+1] *= -1;
+          if(y == dim) lattice[x][0] *= -1;
+          *E += dE;
+          *M += lattice[x][y]*2;
+        }
+      }
   }
 }
 
-
-
-
-void randomLattice(double **lattice, int dim, double *E, double *M){
-  for(int i = 1; i < dim+1; i++){
-    for(int j = 1; j < dim+1; j++){
-      double randNum = (((double) rand() / (RAND_MAX)) > 0.5) ? 1: -1;
-      lattice[i][j] = randNum;
+void printLattice(double **lattice, int dim){
+  //Prints the lattice to terminal, including boundary vectors
+  cout << "Matrix:" << endl;
+  for(int i = 0; i < dim+2; i++){
+    for(int j = 0; j < dim+2; j++){
+      cout << setw(12) << setprecision (10) << lattice[i][j];
     }
-  }
-  for(int i = 0; i < dim+1; i++){
-    lattice[i][dim+1] = lattice[i][1];
-    lattice[i][0] = lattice[i][dim];
-    lattice[dim+1][i] = lattice[1][i];
-    lattice[0][i] = lattice[dim][i];
-  }
-
-  for(int i = 1; i < dim+1; i++){
-    for(int j = 1; j < dim+1; j++){
-      *M += lattice[i][j];
-      *E += lattice[i][j]*lattice[i+1][j] + lattice[i][j]*lattice[i][j+1];
-    }
+    cout << endl;
   }
 }
