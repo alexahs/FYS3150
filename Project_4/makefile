@@ -5,9 +5,9 @@
 # Version:         0.1
 # =============================================
 EXEC 			= runproject4.exe
-CPP 			= c++
-CPPflags 	= -Wall -O3
-LIB 			= -larmadillo -llapack -lblas
+CPP 			= mpic++
+CPPflags 	= -Wall -O3 -g
+LIB 			=
 
 SRC_DIR		= ./src
 INC_DIR		= -I./include

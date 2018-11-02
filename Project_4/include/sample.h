@@ -23,6 +23,8 @@ public:
   //Properties
   int dim;
   int nCycles;
+  int loopStart;
+  int loopStop;
   double temperature;
   double meanE;
   double meanE2;
@@ -34,13 +36,15 @@ public:
 
   //Initializers
   // sample();
-  sample(int cycs, int dim, double T);
+  sample(int cycs, int dim, double T, int loopStart, int loopStop);
 
   //Methods
   void initializeLattice(int ordered);
   void precalculateProbs();
   void metropolis();
   void normalize();
+  void getEnergy();
+  void getMagnMoment();
   double susceptibility();
   double heatCapacity();
 

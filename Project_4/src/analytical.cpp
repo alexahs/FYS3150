@@ -19,7 +19,7 @@ double magnExpected(){
 
 double magnSquaredExpected(){
   double Z = 12 + 4*cosh(8.0);
-  return 64.0/Z*(1 + exp(8.0));
+  return 32.0/Z*(1 + exp(8.0));
 }
 
 double heatCapacity(){
