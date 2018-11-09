@@ -38,8 +38,8 @@ void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, do
 
     //  Start Monte Carlo cycle
     for ( int cycle = loopStart; cycle <= loopStop; cycle++ ) {
-      int tempDeltaE = 0;
-      int tempDeltaM = 0;
+      // int tempDeltaE = 0;
+      // int tempDeltaM = 0;
         for ( int x = 0; x < dim; x++ ) {
             for ( int y = 0; y < dim; y++ ) {
                 int ix = SpinDistribution( gen );
@@ -53,16 +53,17 @@ void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, do
                     SpinMatrix[ix][iy] *= -1.0; // Flip one spin => new configuration
                     M += 2*SpinMatrix[ix][iy];
                     E += DeltaE;
-                    tempDeltaE += (int) DeltaE;
-                    tempDeltaM += (int) 2*SpinMatrix[ix][iy];
+                    // tempDeltaE += (int) DeltaE;
+                    // tempDeltaM += (int) 2*SpinMatrix[ix][iy];
                     numOfAccepts += 1;
                 }
             }
         }
 
-        EMV[0].push_back(EMV[0][cycle] + tempDeltaE);
-        EMV[1].push_back(EMV[1][cycle] + tempDeltaM);
-
+        // EMV[0].push_back(EMV[0][cycle] + tempDeltaE);
+        // EMV[1].push_back(EMV[1][cycle] + tempDeltaM);
+        EMV[0].push_back(E);
+        EMV[1].push_back(fabs(M));
 
         ExpectVal[0] += E;
         ExpectVal[1] += E*E;
