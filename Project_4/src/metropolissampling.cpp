@@ -6,7 +6,7 @@
 #include <vector>
 using namespace std;
 
-void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, double T, double *ExpectVal, int ordered ) {
+void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, double T, double *ExpectVal, int ordered, double &Accept ) {
     //  Random number
     random_device rd;
     mt19937_64 gen( rd() );
@@ -72,6 +72,13 @@ void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, do
         ExpectVal[4] += fabs( M );
 
     }
+    // ofstream outfile;
+    // outfile.open("acceptsRatioVsT.dat", std::ios_base::app);
+    // outfile << setw(15) << setprecision(8) << numOfAccepts/(double)loopStop;
+    // outfile << setw(15) << setprecision(8) << T << endl;
+    // outfile.close();
+    Accept = numOfAccepts/double(loopStop);
+
     double norm = 1/(( double ) MCcycles );
     double meanE  = ExpectVal[0]*norm;
     double meanE2 = ExpectVal[1]*norm;
@@ -108,14 +115,15 @@ void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, do
 //    outfile << setw(15) << setprecision(8) << varE/T/T;
 //    outfile.close();
 
-    ofstream ofile;
-    for(int i = 0; i < 2; i++){
-      ofile.open(to_string(i) + "calibrate" + to_string(dim) + "Cycles" + to_string(MCcycles) + "Ordered" + to_string(ordered) + ".bin", ofstream::binary);
-      ofile.write(reinterpret_cast<const char*> (EMV[i].data()), EMV[i].size()*sizeof(int));
-      ofile.close();
-    }
-
-
+    // ofstream ofile;
+    // for(int i = 0; i < 2; i++){
+    //   ofile.open(to_string(i) + "calibrate" + to_string(dim) + "Cycles" + to_string(MCcycles) + "Ordered" + to_string(ordered) + ".bin", ofstream::binary);
+    //   ofile.write(reinterpret_cast<const char*> (EMV[i].data()), EMV[i].size()*sizeof(int));
+    //   ofile.close();
+    // }
+    //
+    // cout << "MC cycles: " << loopStop << endl;
+    // cout << "Accepted configurations: " << numOfAccepts << endl;
 
 
     //  Memory deallocation
