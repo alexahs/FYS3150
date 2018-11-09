@@ -58,17 +58,22 @@ plt.style.use('ggplot')
 # ===================================================
 
 
-E_filename = "0calibrate20Cycles500.bin"
-M_filename = "1calibrate20Cycles500.bin"
-cycles = np.linspace(1, 500, 500+2)
-Evalues = np.fromfile(E_filename, dtype=np.int32)/400.0
-Mvalues = np.fromfile(M_filename, dtype=np.int32)/400.0
+EO_filename = "0calibrate20Cycles1000Ordered1.bin"
+ER_filename = "0calibrate20Cycles1000Ordered0.bin"
+M_filename = "1calibrate20Cycles1000.bin"
+cyc = 1000
+cycles = np.linspace(1, cyc, cyc+2)
+ERvalues = np.fromfile(ER_filename, dtype=np.int32)/400.0
+MRvalues = np.fromfile(MR_filename, dtype=np.int32)/400.0
+EOvalues = np.fromfile(EO_filename, dtype=np.int32)/400.0
+MOvalues = np.fromfile(MO_filename, dtype=np.int32)/400.0
 
 # print len(cycles)
 # print len(Evalues)
 
 plt.plot(cycles, Evalues)
-plt.plot(cycles, Mvalues)
+# plt.plot(cycles, Mvalues)
 plt.xlabel("No. of MC cycles")
 plt.ylabel("Energy per spin")
+plt.axis([0, cyc+2, -2.1, -1.5 ])
 plt.show()

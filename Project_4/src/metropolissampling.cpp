@@ -110,7 +110,7 @@ void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, do
 
     ofstream ofile;
     for(int i = 0; i < 2; i++){
-      ofile.open(to_string(i) + "calibrate" + to_string(dim) + "Cycles" + to_string(MCcycles) + ".bin", ofstream::binary);
+      ofile.open(to_string(i) + "calibrate" + to_string(dim) + "Cycles" + to_string(MCcycles) + "Ordered" + to_string(ordered) + ".bin", ofstream::binary);
       ofile.write(reinterpret_cast<const char*> (EMV[i].data()), EMV[i].size()*sizeof(int));
       ofile.close();
     }
