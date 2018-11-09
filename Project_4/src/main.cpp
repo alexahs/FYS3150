@@ -33,8 +33,8 @@ int main( int argc, char *argv[] )
     int ordered = 0;
     int dim = 20;
     int MCcycles = 200;
-    double InitialTemp = 1.0;
-    double FinalTemp = 1.0;
+    double InitialTemp = 2.4;
+    double FinalTemp = 2.4;
     double TimeStep = 0.1;
     double timing;
     chrono::high_resolution_clock::time_point t1;

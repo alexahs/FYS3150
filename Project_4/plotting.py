@@ -10,9 +10,9 @@ plt.style.use('ggplot')
 
 
 # ===============OPPGAVE 4B========================
-# filename = "cycleComparison.dat"
+# filename = "cycleComparison.txt"
 # dat = np.loadtxt(filename)
-# anal = np.loadtxt("analytical.dat")
+# anal = np.loadtxt("analytical.txt")
 #
 #
 # E = dat[:, 1]
@@ -43,12 +43,12 @@ plt.style.use('ggplot')
 # errCv = absE(anal[5], Cv)
 # errChi = absE(anal[6], chi)
 #
-# figname = "errors_Cv_X.png"
+# figname = "errors_E_M.pdf"
 # # plt.loglog(cyc, errE)
 # # plt.loglog(cyc, errM)
-# plt.loglog(cyc, errCv)
-# plt.loglog(cyc, errChi)
-# plt.legend([r"$C_v$", r"$\chi$"])
+# plt.loglog(cyc, errE)
+# plt.loglog(cyc, errM)
+# plt.legend([r"$\langle E \rangle$", r"$|M|$"])
 # plt.xlabel("No. of MC Cycles")
 # plt.ylabel("Absolute error")
 # plt.savefig(figname)
@@ -57,6 +57,7 @@ plt.style.use('ggplot')
 # plt.show()
 # ===================================================
 
+# =============OPPGAVE 4C============================
 cyc = 200
 cyc_string = str(cyc)
 
@@ -72,13 +73,20 @@ MRvalues = np.fromfile(MR_filename, dtype=np.int32)/400.0
 MOvalues = np.fromfile(MO_filename, dtype=np.int32)/400.0
 
 
-plt.plot(cycles, ERvalues)
-plt.plot(cycles, EOvalues)
-# plt.plot(cycles, MRvalues)
-# plt.plot(cycles, MOvalues)
+meanE = (sum(ERvalues) + sum(EOvalues))/float(len(ERvalues) + len(EOvalues))
+meanM = (sum(MRvalues) + sum(MOvalues))/float(len(MRvalues) + len(MOvalues))
+
+print meanE, meanM
+
+# plt.plot(cycles, ERvalues)
+# plt.plot(cycles, EOvalues)
+plt.plot(cycles, MRvalues)
+plt.plot(cycles, MOvalues)
+plt.plot((1, cyc), (meanM, meanM), "k")
 plt.xlabel("No. of MC cycles")
-plt.ylabel(r"$\langle E \rangle$")
-plt.legend(["Random lattice", "Ordered lattice"])
+plt.ylabel(r"$\langle |M| \rangle$")
+plt.legend(["Random lattice", "Ordered lattice", r"$\overline{E}$"])
 # plt.axis([0, cyc+2, -2.1, -1.5 ])
-plt.savefig("equilibriumTime_E.pdf")
+plt.savefig("equilibriumTime_M_T24.pdf")
 plt.show()
+# ===================================================
