@@ -100,25 +100,13 @@ plt.style.use('ggplot')
 # ===================================================
 
 
-data1 = np.loadtxt("1acceptsVsMC.dat")
-data2 = np.loadtxt("2acceptsVsMC.dat")
-data3 = np.loadtxt("3acceptsVsMC.dat")
-data4 = np.loadtxt("4acceptsVsMC.dat")
-data5 = np.loadtxt("5acceptsVsMC.dat")
-data6 = np.loadtxt("6acceptsVsMC.dat")
-data7 = np.loadtxt("7acceptsVsMC.dat")
-data8 = np.loadtxt("8acceptsVsMC.dat")
-data9 = np.loadtxt("9acceptsVsMC.dat")
-data10 = np.loadtxt("10acceptsVsMC.dat")
+data = np.loadtxt("acceptsRatioVsT.txt")
 
-allData = np.array([data1, data2, data3, data4, data5, data6, data7, data8, data9, data10])
+T = data[:, 0]
+rat = data[:, 1]
 
-avgData = np.zeros(99)
-
-for i, j in zip( range(len(data1)), range(len(data1))):
-    avgData[i] = sum(allData[j])
-
-
-
-
-print avgData[0]
+plt.plot(T, rat)
+plt.xlabel("Temperature [kT/J]")
+plt.ylabel("Ratio of accepted configurations")
+plt.savefig("acceptRatio.pdf")
+plt.show()

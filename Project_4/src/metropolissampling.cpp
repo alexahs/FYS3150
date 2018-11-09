@@ -77,7 +77,7 @@ void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, do
     // outfile << setw(15) << setprecision(8) << numOfAccepts/(double)loopStop;
     // outfile << setw(15) << setprecision(8) << T << endl;
     // outfile.close();
-    Accept = numOfAccepts/double(loopStop);
+    Accept = numOfAccepts/(double)loopStop;
 
     double norm = 1/(( double ) MCcycles );
     double meanE  = ExpectVal[0]*norm;

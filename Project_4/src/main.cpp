@@ -30,12 +30,12 @@ int main( int argc, char *argv[] )
 //-------------------------------------------------------------------------
 //    Project 4c)
     string filename;
-    int ordered = 1;
+    int ordered = 0;
     int dim = 20;
     int MCcycles = 1e4;
     // int MCmax = 1e5;
     double InitialTemp = 1.0;
-    double FinalTemp = 2.5;
+    double FinalTemp = 5.0;
     double TimeStep = 0.05;
     double timing;
     chrono::high_resolution_clock::time_point t1;
@@ -59,8 +59,6 @@ int main( int argc, char *argv[] )
     // MPI_Bcast (&InitialTemp, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     // MPI_Bcast (&FinalTemp, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     // MPI_Bcast (&TimeStep, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    for ( double T = InitialTemp; T <= FinalTemp; T += TimeStep) {
-      double acceptRatio = 0;
     // for(int MCcycles = 10; MCcycles < MCmax; MCcycles+=10){
 
     int cycleInterval = MCcycles/nProcs;
@@ -85,6 +83,8 @@ int main( int argc, char *argv[] )
     //     outfile << setw(15) << setprecision(8) << "Runtime";
     //     outfile << setw(15) << setprecision(8) << "#cycles" << endl;
 
+    for ( double T = InitialTemp; T <= FinalTemp; T += TimeStep) {
+      double acceptRatio = 0;
         if (my_rank==0) t1 = chrono::high_resolution_clock::now();
         MetropolisSampling( dim, MCcycles, loopStart, loopStop, T, ExpectVal, ordered, acceptRatio);
         for ( int i = 0; i < 5; i++ ) {
@@ -101,7 +101,7 @@ int main( int argc, char *argv[] )
           }
 
           ofstream outfile;
-          outfile.open("acceptsRatioVsT.dat", std::ios_base::app);
+          outfile.open("acceptsRatioVsTdisordered.txt", std::ios_base::app);
           outfile << setw(15) << setprecision(8) << T;
           outfile << setw(15) << setprecision(8) << acceptRatio << endl;
           outfile.close();
