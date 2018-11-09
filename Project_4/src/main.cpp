@@ -1,135 +1,119 @@
 #include <iostream>
-#include <cmath>
+#include <random>
 #include <fstream>
 #include <iomanip>
-#include <cstdio>
-#include <chrono>
-#include <algorithm>
-#include <vector>
-#include <string>
-#include <time.h>
-#include <stdlib.h>
-#include <iomanip>
-#include <mpi.h>
-// #include "initializeLattice.h"
-// #include "analytical.h"
-#include "sample.h"
 #include "analytical.h"
-using std::chrono::steady_clock;
-using std::chrono::duration_cast;
-using std::chrono::duration;
+#include "metropolissampling.h"
+#include <mpi.h>
+#include <chrono>
+
 using namespace std;
+ofstream outfile;
+
+void output( int dim, double T, double *ExpectVal, int MCcycles, double timing );
+
+int main( int argc, char *argv[] )
+{
+    double *ExpectVal = new double[5];
+    double *TotalExpectVal = new double[5];
+    for( int i = 0; i < 5; i++ ) TotalExpectVal[i] = 0;
+
+//-------------------------------------------------------------------------
+//    Project 4c)
+    string filename;
+    int ordered = 0;
+    int dim = 2;
+    int MCcycles = 100;
+    double InitialTemp = 1.0;
+    double FinalTemp = 1.0;
+    double TimeStep = 0.1;
+    double timing;
+    chrono::high_resolution_clock::time_point t1;
+    chrono::high_resolution_clock::time_point t2;
+
+    int nProcs, my_rank;
 
 
-void printEnergies(sample Sample, double T, int dim, int nCycles, double *expVals);
-void printMatrix(sample Sample, int dim);
+    MPI_Init (&argc, &argv);
+    MPI_Comm_size (MPI_COMM_WORLD, &nProcs);
+    MPI_Comm_rank (MPI_COMM_WORLD, &my_rank);
 
-int main(int argc, char *argv[]){
-  int dim = 2;
-  int ordered = 0;
-  double temp_init = 1.0;
-  double temp_final = 1.1;
-  double temp_step = 0.01;
-  int cycles = 1<<20;
-  double norm = 1.0/(dim*dim);
-  steady_clock::time_point programStart;
-  programStart = steady_clock::now();
+    // MPI_Bcast (&dim, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    // MPI_Bcast (&InitialTemp, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    // MPI_Bcast (&FinalTemp, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    // MPI_Bcast (&TimeStep, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-  int nProcs, my_rank;
-
-  double *ExpecVals = new double[5];
-  double *AllExpecVals = new double[5];
-  for(int i = 0; i < 5; i++){
-    ExpecVals[i] = 0;
-    AllExpecVals[i] = 0;
-  }
+    int cycleInterval = MCcycles/nProcs;
+    int loopStart = my_rank*cycleInterval;
+    int loopStop = (my_rank+1)*cycleInterval;
 
 
-  MPI_Init (&argc, &argv);
-  MPI_Comm_size (MPI_COMM_WORLD, &nProcs);
-  MPI_Comm_rank (MPI_COMM_WORLD, &my_rank);
 
-  MPI_Bcast (&dim, 1, MPI_INT, 0, MPI_COMM_WORLD);
-  MPI_Bcast (&temp_init, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-  MPI_Bcast (&temp_final, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-  MPI_Bcast (&temp_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-  int cycleInterval = cycles/nProcs;
-  int loopStart = my_rank*cycleInterval;
-  int loopStop = (my_rank+1)*cycleInterval;
-
-  for(double temperature = temp_init; temperature <= temp_final; temperature+=temp_step){
-
-    sample S = sample(cycleInterval, dim, temperature, loopStart, loopStop);
-    S.initializeLattice(ordered);
-    S.precalculateProbs();
-    S.metropolis();
-    ExpecVals[0] = S.meanE;
-    ExpecVals[1] = S.meanE2;
-    ExpecVals[2] = S.meanM;
-    ExpecVals[3] = S.meanM2;
-    ExpecVals[4] = S.absM;
-    for(int i = 0; i < 5; i++){
-      MPI_Reduce(&ExpecVals[i], &AllExpecVals[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    if (my_rank == 0){
+        printAnalytical();
+        outfile.open("Lattice" + to_string(dim) + "Cycles" + to_string(MCcycles) + ".dat", std::ios_base::app);
+        // outfile.open("Lattice" + to_string(dim) + ".dat", std::ios_base::app);
+        outfile << setw(15) << setprecision(8) << "T";
+        outfile << setw(15) << setprecision(8) << "E";
+        outfile << setw(15) << setprecision(8) << "E2";
+        outfile << setw(15) << setprecision(8) << "M";
+        outfile << setw(15) << setprecision(8) << "M2";
+        outfile << setw(15) << setprecision(8) << "M abs";
+        outfile << setw(15) << setprecision(8) << "chi";
+        outfile << setw(15) << setprecision(8) << "C_V";
+        outfile << setw(15) << setprecision(8) << "Runtime";
+        outfile << setw(15) << setprecision(8) << "#cycles" << endl;
     }
-    if(my_rank == 0){
-      printEnergies(S, temperature, dim, cycles, AllExpecVals);
+    for ( double T = InitialTemp; T <= FinalTemp; T += TimeStep) {
+        if (my_rank==0) t1 = chrono::high_resolution_clock::now();
+        MetropolisSampling( dim, MCcycles, loopStart, loopStop, T, ExpectVal, ordered);
+        for ( int i = 0; i < 5; i++ ) {
+            MPI_Reduce(&ExpectVal[i], &TotalExpectVal[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        }
+            if (my_rank==0) {
+            t2 = chrono::high_resolution_clock::now();
+            chrono::duration<double> time_span = std::chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+            timing = time_span.count();
+            output( dim, T, TotalExpectVal, MCcycles, timing );
+            cout << "T = " << T << " done...\n";
+            // cout << ExpectVal[0] << endl;
+        }
     }
-  }
+    outfile.close();
+    MPI_Finalize();
+//------------------------------------------------------------------------
 
-  if(my_rank == 0){
-    duration<double> programTime = duration_cast<duration<double>>(steady_clock::now() - programStart);
-    cout << "Program time: " << programTime.count() << endl;
-  }
+////------------------------------------------------------------------------
+////     PROJECT 4b)
+//    int dim = 2;
+//    //  To get money results, 1e7 MCcycles is needed
+//    int MCcycles = 1e6;
+//    double T = 1.0;
+//    MetropolisSampling ( dim, MCcycles, 1, MCcycles, T, ExpectVal );
+//    cout << endl;
+//    cout << "<E> (analytic)             = " << E_() << endl;
+//    cout << "|M| (analytic)             = " << absM() << endl;
+//    cout << "Heat capacity (analytic)   = " << CV()/( dim*dim ) << endl;
+//    cout << "Susceptibility (analytic)  = " << xhi()/( dim*dim ) << endl;
+////--------------------------------------------------------------------------
 
-
-  MPI_Finalize();
-  return 0;
+    delete [] ExpectVal;
+    delete [] TotalExpectVal;
+    return 0;
 }
-
-void printEnergies(sample Sample, double T, int dim, int nCycles, double *expVals){
-  for(int i = 0; i < 5; i++) expVals[i] /= (double) nCycles;
-  double norm = 1.0/(dim*dim);
-  cout << setw(15) << setprecision (6) << T;
-  for(int i = 0; i < 5; i++){
-    cout << setw(15) << setprecision (6) << expVals[i]*norm;
-  }
-  cout << endl;
-
-
-  //
-  // cout << setw(2) << setprecision (6) << Sample.temperature;
-  // cout << setw(15) << setprecision (6) << Sample.meanE;
-  // cout << setw(15) << setprecision (6) << Sample.meanE2;
-  // cout << setw(15) << setprecision (6) << Sample.meanM;
-  // cout << setw(15) << setprecision (6) << Sample.meanM2;
-  // cout << setw(15) << setprecision (6) << Sample.absM << endl;
+void output( int dim, double T, double *ExpectVal, int MCcycles, double timing ) {
+  for( int i = 0; i < 5; i++ ) ExpectVal[i] /= MCcycles;
+  double E_variance = (ExpectVal[1] - ExpectVal[0]*ExpectVal[0])/dim/dim;
+  double M_variance = (ExpectVal[3] - ExpectVal[2]*ExpectVal[2])/dim/dim;
+  outfile << setw(15) << setprecision(8) << T;
+  outfile << setw(15) << setprecision(8) << ExpectVal[0]/dim/dim;
+  outfile << setw(15) << setprecision(8) << ExpectVal[1]/dim/dim;
+  outfile << setw(15) << setprecision(8) << ExpectVal[2]/dim/dim;
+  outfile << setw(15) << setprecision(8) << ExpectVal[3]/dim/dim;
+  outfile << setw(15) << setprecision(8) << ExpectVal[4]/dim/dim;
+  outfile << setw(15) << setprecision(8) << M_variance/T;
+  outfile << setw(15) << setprecision(8) << E_variance/(T*T);
+  outfile << setw(15) << setprecision(8) << timing;
+  outfile << setw(15) << setprecision(8) << MCcycles << endl;
 }
-
-void printMatrix(sample Sample, int dim){
-  cout << "==========================================================" << endl;
-   for(int i = 0; i < dim+2; i++){
-    for(int j = 0; j < dim+2; j++){
-      cout << setw(12) << setprecision (10) << Sample.lattice[i][j];
-    }
-    cout << endl;
-  }
-  cout << "==========================================================" << endl;
-}
-
-
-
-/*
-for(int t = 0; t < nTemps +1; t++){
-
-  double dT = (T1 - T0)/(double) nTemps;
-  double T = T0 + t*dT;
-
-  sample S = sample(cycles, dim, T);
-  S.initializeLattice(ordered);
-  S.precalculateProbs();
-  S.metropolis();
-  S.normalize();
-  printEnergies(S);
-}
-*/

@@ -1,17 +1,14 @@
 #ifndef ANALYTICAL_H
 #define ANALYTICAL_H
-#include <cmath>
-#include <iomanip>
-#include <fstream>
-#include <iostream>
 
-double energyExpected();
-double energySquaredExpected();
-double magnExpected();
-double magnSquaredExpected();
-double heatCapacity();
-double susceptibility();
-
+double E_();
+double E2_();
+double M_();
+double M2_();
+double chi();
+double Cv();
+double absM();
+void printAnalytical();
 
 
 #endif // ANALYTICAL_H
