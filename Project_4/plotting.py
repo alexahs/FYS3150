@@ -56,7 +56,7 @@ plt.style.use('ggplot')
 #
 # plt.show()
 # ===================================================
-
+ a = 1
 
 EO_filename = "0calibrate20Cycles1000Ordered1.bin"
 ER_filename = "0calibrate20Cycles1000Ordered0.bin"
