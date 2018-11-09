@@ -57,23 +57,28 @@ plt.style.use('ggplot')
 # plt.show()
 # ===================================================
 
+cyc = 200
+cyc_string = str(cyc)
 
-EO_filename = "0calibrate20Cycles1000Ordered1.bin"
-ER_filename = "0calibrate20Cycles1000Ordered0.bin"
-M_filename = "1calibrate20Cycles1000.bin"
-cyc = 1000
+ER_filename = "0calibrate20Cycles"+ cyc_string +"Ordered0.bin"
+EO_filename = "0calibrate20Cycles"+ cyc_string +"Ordered1.bin"
+MR_filename = "1calibrate20Cycles"+ cyc_string +"Ordered0.bin"
+MO_filename = "1calibrate20Cycles"+ cyc_string +"Ordered1.bin"
+
 cycles = np.linspace(1, cyc, cyc+2)
 ERvalues = np.fromfile(ER_filename, dtype=np.int32)/400.0
-MRvalues = np.fromfile(MR_filename, dtype=np.int32)/400.0
 EOvalues = np.fromfile(EO_filename, dtype=np.int32)/400.0
+MRvalues = np.fromfile(MR_filename, dtype=np.int32)/400.0
 MOvalues = np.fromfile(MO_filename, dtype=np.int32)/400.0
 
-# print len(cycles)
-# print len(Evalues)
 
-plt.plot(cycles, Evalues)
-# plt.plot(cycles, Mvalues)
+plt.plot(cycles, ERvalues)
+plt.plot(cycles, EOvalues)
+# plt.plot(cycles, MRvalues)
+# plt.plot(cycles, MOvalues)
 plt.xlabel("No. of MC cycles")
-plt.ylabel("Energy per spin")
-plt.axis([0, cyc+2, -2.1, -1.5 ])
+plt.ylabel(r"$\langle E \rangle$")
+plt.legend(["Random lattice", "Ordered lattice"])
+# plt.axis([0, cyc+2, -2.1, -1.5 ])
+plt.savefig("equilibriumTime_E.pdf")
 plt.show()

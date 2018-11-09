@@ -30,9 +30,9 @@ int main( int argc, char *argv[] )
 //-------------------------------------------------------------------------
 //    Project 4c)
     string filename;
-    int ordered = 1;
+    int ordered = 0;
     int dim = 20;
-    int MCcycles = 1000;
+    int MCcycles = 200;
     double InitialTemp = 1.0;
     double FinalTemp = 1.0;
     double TimeStep = 0.1;
