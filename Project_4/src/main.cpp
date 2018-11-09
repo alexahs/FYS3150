@@ -6,6 +6,7 @@
 #include "metropolissampling.h"
 #include <mpi.h>
 #include <chrono>
+#include <vector>
 
 using namespace std;
 ofstream outfile;
@@ -23,9 +24,9 @@ int main( int argc, char *argv[] )
     string filename;
     int ordered = 0;
     int dim = 2;
-    int MCcycles = 100;
+    int MCcycles = 1e5;
     double InitialTemp = 1.0;
-    double FinalTemp = 1.0;
+    double FinalTemp = 2.0;
     double TimeStep = 0.1;
     double timing;
     chrono::high_resolution_clock::time_point t1;
@@ -51,8 +52,8 @@ int main( int argc, char *argv[] )
 
 
     if (my_rank == 0){
-        printAnalytical();
-        outfile.open("Lattice" + to_string(dim) + "Cycles" + to_string(MCcycles) + ".dat", std::ios_base::app);
+        // printAnalytical();
+        outfile.open("Lattice" + to_string(dim) + "Cycles" + to_string(MCcycles) + ".dat");
         // outfile.open("Lattice" + to_string(dim) + ".dat", std::ios_base::app);
         outfile << setw(15) << setprecision(8) << "T";
         outfile << setw(15) << setprecision(8) << "E";
@@ -77,6 +78,7 @@ int main( int argc, char *argv[] )
             timing = time_span.count();
             output( dim, T, TotalExpectVal, MCcycles, timing );
             cout << "T = " << T << " done...\n";
+
             // cout << ExpectVal[0] << endl;
         }
     }
