@@ -100,13 +100,18 @@ plt.style.use('ggplot')
 # ===================================================
 
 
-data = np.loadtxt("acceptsRatioVsT.txt")
+dataOrder = np.loadtxt("acceptsRatioVsT.txt")
+dataRandom = np.loadtxt("acceptsRatioVsTdisordered.txt")
 
-T = data[:, 0]
-rat = data[:, 1]
+T = dataOrder[:, 0]
+ratOrder = dataOrder[:, 1]
+ratRandom = dataRandom[:, 1]
 
-plt.plot(T, rat)
+plt.plot(T, ratOrder)
+plt.plot(T, ratRandom)
+
 plt.xlabel("Temperature [kT/J]")
 plt.ylabel("Ratio of accepted configurations")
+plt.legend(["Ordered lattice", "Random lattice"])
 plt.savefig("acceptRatio.pdf")
 plt.show()
