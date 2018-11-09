@@ -11,7 +11,7 @@
 using namespace std;
 ofstream outfile;
 
-void output( int dim, double T, double *ExpectVal, int MCcycles, double timing );
+void output( int dim, double T, double *ExpectVal, int MCcycles, double timing);
 
 int main( int argc, char *argv[] )
 {
@@ -19,18 +19,32 @@ int main( int argc, char *argv[] )
     double *TotalExpectVal = new double[5];
     for( int i = 0; i < 5; i++ ) TotalExpectVal[i] = 0;
 
+
+
+
+
+
+
+
+
 //-------------------------------------------------------------------------
 //    Project 4c)
     string filename;
     int ordered = 0;
-    int dim = 2;
-    int MCcycles = 1e5;
+    int dim = 20;
+    int MCcycles = 500;
     double InitialTemp = 1.0;
-    double FinalTemp = 2.0;
+    double FinalTemp = 1.0;
     double TimeStep = 0.1;
     double timing;
     chrono::high_resolution_clock::time_point t1;
     chrono::high_resolution_clock::time_point t2;
+
+    // vector<vector<int>> energyMagnVector;
+    // energyMagnVector.resize(3);
+    // for(int i = 0; i < 3; i++){
+    //   energyMagnVector[i].resize(MCcycles);
+    // }
 
     int nProcs, my_rank;
 

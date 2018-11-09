@@ -5,7 +5,7 @@ using namespace std;
 
 //  Initial E, M, and SpinMatrix
 //  && => R-value reference
-void InitializeLattice ( int dim, double **SpinMatrix, double &E, double &M, int ordered ) {
+void InitializeLattice ( int dim, double **SpinMatrix, double &E, double &M, int ordered) {
   random_device rd;
   mt19937_64 gen( rd() );
    // Uniform "REAL" distribution for x \in [0,1]

@@ -8,48 +8,67 @@ plt.style.use('ggplot')
 # plt.rc('text', usetex=True)
 # plt.rc('font', family='serif')
 
-filename = "cycleComparison.dat"
-dat = np.loadtxt(filename)
-anal = np.loadtxt("analytical.dat")
+
+# ===============OPPGAVE 4B========================
+# filename = "cycleComparison.dat"
+# dat = np.loadtxt(filename)
+# anal = np.loadtxt("analytical.dat")
+#
+#
+# E = dat[:, 1]
+# M = dat[:, 5]
+# Cv = dat[:, 7]
+# chi = dat[:, 6]
+# cyc = dat[:, -1]
+#
+# anal = anal/4.0
+#
+# # errors = np.zeros((len(E), 4))
+# errE = np.zeros(len(E))
+# errM = np.zeros(len(E))
+# errCv = np.zeros(len(E))
+# errChi = np.zeros(len(E))
+#
+#
+#
+# # vals = np.array([E, M, Cv, chi])*4.0
+#
+# def absE(A, S):
+#     # print A
+#     # print S
+#     return abs((A - S)/A)
+#
+# errE = absE(anal[0], E)
+# errM = absE(anal[4], M)
+# errCv = absE(anal[5], Cv)
+# errChi = absE(anal[6], chi)
+#
+# figname = "errors_Cv_X.png"
+# # plt.loglog(cyc, errE)
+# # plt.loglog(cyc, errM)
+# plt.loglog(cyc, errCv)
+# plt.loglog(cyc, errChi)
+# plt.legend([r"$C_v$", r"$\chi$"])
+# plt.xlabel("No. of MC Cycles")
+# plt.ylabel("Absolute error")
+# plt.savefig(figname)
+#
+#
+# plt.show()
+# ===================================================
 
 
-E = dat[:, 1]
-M = dat[:, 5]
-Cv = dat[:, 7]
-chi = dat[:, 6]
-cyc = dat[:, -1]
+E_filename = "0calibrate20Cycles500.bin"
+M_filename = "1calibrate20Cycles500.bin"
+cycles = np.linspace(1, 500, 500+2)
+Evalues = np.fromfile(E_filename, dtype=np.int32)/400.0
+Mvalues = np.fromfile(M_filename, dtype=np.int32)/400.0
 
-anal = anal/4.0
+# print len(cycles)
+# print len(Evalues)
 
-# errors = np.zeros((len(E), 4))
-errE = np.zeros(len(E))
-errM = np.zeros(len(E))
-errCv = np.zeros(len(E))
-errChi = np.zeros(len(E))
-
-
-
-# vals = np.array([E, M, Cv, chi])*4.0
-
-def absE(A, S):
-    # print A
-    # print S
-    return abs((A - S)/A)
-
-errE = absE(anal[0], E)
-errM = absE(anal[4], M)
-errCv = absE(anal[5], Cv)
-errChi = absE(anal[6], chi)
-
-figname = "errors_Cv_X.png"
-# plt.loglog(cyc, errE)
-# plt.loglog(cyc, errM)
-plt.loglog(cyc, errCv)
-plt.loglog(cyc, errChi)
-plt.legend([r"$C_v$", r"$\chi$"])
-plt.xlabel("No. of MC Cycles")
-plt.ylabel("Absolute error")
-plt.savefig(figname)
-
-
+plt.plot(cycles, Evalues)
+plt.plot(cycles, Mvalues)
+plt.xlabel("No. of MC cycles")
+plt.ylabel("Energy per spin")
 plt.show()
