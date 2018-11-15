@@ -118,21 +118,21 @@ plt.style.use('ggplot')
 
 
 
-data40 = np.loadtxt("CriticalTemps_Dim40Cycles10000.dat", skiprows = 1)
-data60 = np.loadtxt("CriticalTemps_Dim60Cycles10000.dat", skiprows = 1)
-data80 = np.loadtxt("CriticalTemps_Dim80Cycles10000.dat", skiprows = 1)
-# data100 = np.loadtxt("CriticalTemps_Dim100Cycles100000.txt", skiprows = 1)
+data40 = np.loadtxt("CriticalTemps_Dim40Cycles100000.txt", skiprows = 1)
+data60 = np.loadtxt("CriticalTemps_Dim60Cycles100000.txt", skiprows = 1)
+data80 = np.loadtxt("CriticalTemps_Dim80Cycles100000.txt", skiprows = 1)
+data100 = np.loadtxt("CriticalTemps_Dim100Cycles100000.txt", skiprows = 1)
 
 print data40
 
 plt.plot(data40[:,0], data40[:,4])
 plt.plot(data60[:,0], data60[:,4])
 plt.plot(data80[:,0], data80[:,4])
-# plt.plot(data100[:,0], data100[:,4])
+plt.plot(data100[:,0], data100[:,4])
 plt.show()
 
 plt.plot(data40[:,0], data40[:,3])
 plt.plot(data60[:,0], data60[:,3])
 plt.plot(data80[:,0], data80[:,3])
-# plt.plot(data100[:,0], data100[:,3])
+plt.plot(data100[:,0], data100[:,3])
 plt.show()
