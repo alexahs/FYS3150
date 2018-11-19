@@ -5,6 +5,7 @@
 #include <iomanip>
 #include "initializelattice.h"
 using namespace std;
+ofstream ofile;
 
 void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, double T, double *ExpectVal,
                           int ordered, double &Accept ) {
@@ -29,11 +30,10 @@ void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, do
     vector<vector<int>> EMV;
     EMV.resize(2);
     int numOfAccepts = 0;
-    EMV[0].push_back( (int) E );
-    EMV[1].push_back( (int) M );
+    // EMV[0].push_back( (int) E );
+    // EMV[1].push_back( (int) M );
     //  --
     for ( int i = 0; i < 17; i += 4 ) EnergyDifference[i] = exp( -( i-8 )/T );
-
     //  Start Monte Carlo cycle
     for ( int cycle = loopStart; cycle <= loopStop; cycle++ ) {
         for ( int x = 0; x < dim; x++ ) {
@@ -48,15 +48,14 @@ void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, do
                         SpinMatrix[PeriodicBoundary( ix, dim, 1 )][iy] );
                 if ( RandomNumberGenerator( gen ) <= EnergyDifference[DeltaE + 8] ) {
                     SpinMatrix[ix][iy] *= -1.0; // Flip one spin => new configuration
-
                     M += 2*SpinMatrix[ix][iy];
                     E += DeltaE;
                     numOfAccepts++;
                 }
             }
         }
-        EMV[0].push_back( E ); //  push_back in c++ is like append i python
-        EMV[1].push_back( fabs( M ) );
+        // EMV[0].push_back( E ); //  push_back in c++ is like append i python
+        // EMV[1].push_back( fabs( M ) );
 
         ExpectVal[0] += E;
         ExpectVal[1] += E*E;
@@ -67,13 +66,11 @@ void MetropolisSampling ( int dim, int MCcycles, int loopStart, int loopStop, do
     }
 //    ofstream ofile;
     //  4c) write to binary file
-//    for(int i = 0; i < 2; i++){
-//        ofile.open("/Users/hennoz/FYS3150Project4/" + to_string(i) + "calibrate" +
-//                   to_string(dim) + "Cycles" + to_string(MCcycles) + "Ordered" + to_string(ordered)
-//                   + ".bin", ofstream::binary);
-//        ofile.write(reinterpret_cast<const char*> (EMV[i].data()), EMV[i].size()*sizeof(int));
-//        ofile.close();
-//    }
+    // ofile.open("energiesEachMCsample" + to_string(T) + "Cycles" + to_string(MCcycles) + ".bin", ofstream::binary);
+    //
+    // ofile.write(reinterpret_cast<const char*> (EMV[0].data()), EMV[0].size()*sizeof(int));
+    // ofile.close();
+
     Accept = numOfAccepts/double(loopStop);
 
 //    double norm = 1/(( double ) MCcycles );

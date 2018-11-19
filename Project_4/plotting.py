@@ -1,5 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.mlab as mlab
+
+
+from scipy.stats import norm
+from scipy.integrate import quad
 plt.style.use('ggplot')
 # import seaborn as sns
 # sns.set()
@@ -116,23 +121,82 @@ plt.style.use('ggplot')
 # plt.savefig("acceptRatio.pdf")
 # plt.show()
 
+# ====================OPPGAVE 4E=================================
+
+data40 = np.loadtxt("dim40CriticalTemps100000Cycles.dat", skiprows = 1)
+data60 = np.loadtxt("dim60CriticalTemps100000Cycles.dat", skiprows = 1)
+data80 = np.loadtxt("dim80CriticalTemps100000Cycles.dat", skiprows = 1)
+data100 = np.loadtxt("dim100CriticalTemps100000Cycles.dat", skiprows = 1)
+
+temps = data40[:,0]
+data40 = data40[:,1:]
+data60 = data60[:,1:]
+data80 = data80[:,1:]
+data100 = data100[:,1:]
 
 
-data40 = np.loadtxt("CriticalTemps_Dim40Cycles10000.dat", skiprows = 1)
-data60 = np.loadtxt("CriticalTemps_Dim60Cycles10000.dat", skiprows = 1)
-data80 = np.loadtxt("CriticalTemps_Dim80Cycles10000.dat", skiprows = 1)
-# data100 = np.loadtxt("CriticalTemps_Dim100Cycles100000.txt", skiprows = 1)
-
-print data40
-
-plt.plot(data40[:,0], data40[:,4])
-plt.plot(data60[:,0], data60[:,4])
-plt.plot(data80[:,0], data80[:,4])
-# plt.plot(data100[:,0], data100[:,4])
+plt.plot(temps, data40[:,3])
+plt.plot(temps, data60[:,3])
+plt.plot(temps, data80[:,3])
+plt.plot(temps, data100[:,3])
+plt.xlabel("Temperature [kT/J]")
+plt.ylabel(r"$C_v$")
+plt.legend("40 x 40", "60 x 60", "80 x 80", "100 x 100")
+plt.savefig("Heatcap.pdf")
 plt.show()
 
-plt.plot(data40[:,0], data40[:,3])
-plt.plot(data60[:,0], data60[:,3])
-plt.plot(data80[:,0], data80[:,3])
-# plt.plot(data100[:,0], data100[:,3])
+plt.plot(temps, data40[:,2])
+plt.plot(temps, data60[:,2])
+plt.plot(temps, data80[:,2])
+plt.plot(temps, data100[:,2])
+plt.xlabel("Temperature [kT/J]")
+plt.ylabel(r"$\chi$")
+plt.savefig("Susceptibility.pdf")
 plt.show()
+
+plt.plot(temps, data40[:,1])
+plt.plot(temps, data60[:,1])
+plt.plot(temps, data80[:,1])
+plt.plot(temps, data100[:,1])
+plt.xlabel("Temperature [kT/J]")
+plt.ylabel(r"$\langle \overline{M} \rangle$")
+plt.savefig("Magnetization.pdf")
+plt.show()
+
+plt.plot(temps, data40[:,0])
+plt.plot(temps, data60[:,0])
+plt.plot(temps, data80[:,0])
+plt.plot(temps, data100[:,0])
+plt.ylabel(r"$\langle E \rangle$ ")
+plt.xlabel("Temperature [kT/J]")
+plt.savefig("Energy.pdf")
+plt.show()
+
+
+
+# =================OPPGAVE 4D==============================
+# E = np.fromfile("energyProbabilityT2.400000Cycles100000.bin", dtype=np.int32)
+# indices = int(round(len(E)*0.9))
+# E = E[indices:]
+# a = -800
+# b = -300
+#
+# x = np.linspace(a, b, 1000)
+# num_bins = 50
+# mu, sigma = norm.fit(E)
+#
+# n, bins, patches = plt.hist(E, num_bins, density=True, facecolor='blue', align='mid', alpha=0.75)
+# y = mlab.normpdf( bins, mu, sigma)
+#
+#
+#
+# # plt.plot(bins, y, 'r--')
+# # E = E/(20*1e5)
+# # plt.hist(E, num_bins, density=True, color='b')
+# plt.plot(bins, y, color='r')
+# plt.xlabel("Lattice energy")
+# plt.ylabel("Probability density")
+# plt.legend(["Fitted normal distribution", "Sampeled energy"])
+# plt.savefig("EnergyProbability.pdf")
+# # print min(E[indices:])
+# plt.show()

@@ -175,112 +175,69 @@ plt.style.use('ggplot')
 
 
 # =================OPPGAVE 4D==============================
-# # E = np.fromfile("energyProbabilityT2.400000Cycles100000.bin", dtype=np.int32)
 # E = np.fromfile("energyProbabilityT2.400000Cycles100000.bin", dtype=np.int32)
+# print E
 # indices = int(round(len(E)*0.9))
 # E = E[indices:]
-# a = -700
+# a = -800
 # b = -300
 #
 # x = np.linspace(a, b, 1000)
 # num_bins = 50
 # mu, sigma = norm.fit(E)
 #
-# print mu, sigma
-#
 # n, bins, patches = plt.hist(E, num_bins, density=True, facecolor='blue', align='mid', alpha=0.75)
 # y = mlab.normpdf( bins, mu, sigma)
+#
+#
 #
 # # plt.plot(bins, y, 'r--')
 # # E = E/(20*1e5)
 # # plt.hist(E, num_bins, density=True, color='b')
-# # plt.plot(bins, y, color='r')
+# plt.plot(bins, y, color='r')
 # plt.xlabel("Lattice energy")
 # plt.ylabel("Probability density")
 # plt.legend(["Fitted normal distribution", "Sampeled energy"])
-# # plt.savefig("EnergyProbabilityT1.pdf")
+# plt.savefig("EnergyProbability.pdf")
 # # print min(E[indices:])
 # plt.show()
 
 # =========HIGH RES PLOTS===============
-#
-#
-# data80 = np.loadtxt("HIGHRESdim120CriticalTemps100000Cycles.dat", skiprows = 1)
-# data100 = np.loadtxt("HIGHRESdim140CriticalTemps100000Cycles.dat", skiprows = 1)
-#
-# temps = data80[:,0]
-# data80 = data80[:,1:]
-# data100 = data100[:,1:]
-#
-#
-# plt.plot(temps, data80[:,3])
-# plt.plot(temps, data100[:,3])
-# plt.xlabel("Temperature [kT/J]")
-# plt.ylabel(r"$C_v$")
-# plt.legend(["120 x 120", "140 x 140"])
-# plt.savefig("Heatcap.pdf")
-# plt.show()
-#
-# plt.plot(temps, data80[:,2])
-# plt.plot(temps, data100[:,2])
-# plt.xlabel("Temperature [kT/J]")
-# plt.ylabel(r"$\chi$")
-# plt.savefig("Susceptibility.pdf")
-# plt.show()
-#
-# plt.plot(temps, data80[:,1])
-# plt.plot(temps, data100[:,1])
-# plt.xlabel("Temperature [kT/J]")
-# plt.ylabel(r"$\langle \overline{M} \rangle$")
-# plt.savefig("Magnetization.pdf")
-# plt.show()
-#
-# plt.plot(temps, data80[:,0])
-# plt.plot(temps, data100[:,0])
-# plt.ylabel(r"$\langle E \rangle$ ")
-# plt.xlabel("Temperature [kT/J]")
-# plt.savefig("Energy.pdf")
-# plt.show()
 
 
-# =============CRIT TEMPERATURE CALCULATIONS==============
+data80 = np.loadtxt("HIGHRESdim120CriticalTemps100000Cycles.dat", skiprows = 1)
+data100 = np.loadtxt("HIGHRESdim140CriticalTemps100000Cycles.dat", skiprows = 1)
 
-L = np.array([100.0, 80.0, 60.0, 40.0])
-T = np.array([2.27, 2.29, 2.30, 2.30])
+temps = data80[:,0]
+data80 = data80[:,1:]
+data100 = data100[:,1:]
 
 
-def Tc(L1, L2, T1, T2):
-    a = (T1 - T2)/(1.0/float(L1) - 1.0/float(L2))
-    return T1 - a/float(L1)
+plt.plot(temps, data80[:,3])
+plt.plot(temps, data100[:,3])
+plt.xlabel("Temperature [kT/J]")
+plt.ylabel(r"$C_v$")
+plt.legend(["120 x 120", "140 x 140"])
+plt.savefig("Heatcap.pdf")
+plt.show()
 
-T_list = []
+plt.plot(temps, data80[:,2])
+plt.plot(temps, data100[:,2])
+plt.xlabel("Temperature [kT/J]")
+plt.ylabel(r"$\chi$")
+plt.savefig("Susceptibility.pdf")
+plt.show()
 
-L1 = 100.0
-L2 = 80.0
-L3 = 60.0
-L4 = 40.0
+plt.plot(temps, data80[:,1])
+plt.plot(temps, data100[:,1])
+plt.xlabel("Temperature [kT/J]")
+plt.ylabel(r"$\langle \overline{M} \rangle$")
+plt.savefig("Magnetization.pdf")
+plt.show()
 
-# T1 = 2.27
-# T2 = 2.29
-# T3 = 2.30
-# T4 = 2.30
-
-T1 =
-
-T_list.append((Tc(L1, L2, T1, T2)))
-T_list.append((Tc(L1, L3, T1, T3)))
-T_list.append((Tc(L1, L4, T1, T4)))
-T_list.append((Tc(L2, L3, T2, T3)))
-T_list.append((Tc(L2, L4, T2, T4)))
-T_list.append((Tc(L3, L4, T3, T4)))
-
-# print T_list
-
-# print pairsT
-# print pairsL
-
-# print T_list
-mu, sigma = norm.fit(T_list)
-print "mu: ", mu
-print "sigma: ", sigma
-print T_list
+plt.plot(temps, data80[:,0])
+plt.plot(temps, data100[:,0])
+plt.ylabel(r"$\langle E \rangle$ ")
+plt.xlabel("Temperature [kT/J]")
+plt.savefig("Energy.pdf")
+plt.show()
