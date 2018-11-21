@@ -3,6 +3,9 @@
 #include <iomanip>
 using namespace std;
 
+//Analytical solutions for the 2x2-lattice at T=1
+
+
 double E_() {
     double Z = 4*cosh( 8 ) + 12;
     return -32/Z*sinh( 8 );
