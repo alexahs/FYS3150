@@ -67,6 +67,8 @@ int main( int argc, char *argv[] )
 
           MetropolisSampling( dim, MCcycles, loopStart, loopStop, T, ExpectVal, ordered, acceptRatio );
           for ( int i = 0; i < 5; i++ ) {
+
+              //gather data from all threads
               MPI_Reduce(&ExpectVal[i], &TotalExpectVal[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
           }
           if (my_rank==0) {
