@@ -4,7 +4,7 @@
 # Date:            2018-09-27
 # Version:         0.1
 # =============================================
-EXEC 			= highresrunproject4.exe
+EXEC 			= runproject4.exe
 CPP 			= mpic++
 CPPflags 	= -Wall -O3 -g
 LIB 			=
