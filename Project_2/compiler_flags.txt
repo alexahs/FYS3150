@@ -1,1 +1,0 @@
-c++ -o progname.exe sourcefile.cpp -Wall
