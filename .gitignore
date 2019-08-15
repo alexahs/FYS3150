@@ -35,7 +35,14 @@
 # Data files
 *.dat
 *.txt
+*.csv
 
 # Misc. files
 *.pro
 *.pro.user
+
+# Images
+*.png
+*.jpg
+*.jpeg
+*.pdf
