@@ -34,3 +34,8 @@
 
 # Data files
 *.dat
+*.txt
+
+# Misc. files
+*.pro
+*.pro.user
